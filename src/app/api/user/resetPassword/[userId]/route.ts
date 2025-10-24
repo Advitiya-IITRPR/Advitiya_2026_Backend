@@ -10,6 +10,7 @@ export async function POST(req: NextRequest,{params}:{params: {userId: string}})
         const urlParams = await params
         const userId = urlParams.userId
 
+
         if(!userId){
             return NextResponse.json({
                 success: false,
@@ -36,7 +37,6 @@ export async function POST(req: NextRequest,{params}:{params: {userId: string}})
                 message: "User does not exist with this user id"
             },{status: 400})
         }
-
         if(!user.resetPasswordCode){
             return NextResponse.json({
                 success: false,

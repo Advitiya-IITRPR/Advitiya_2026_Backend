@@ -11,7 +11,6 @@ export const sendEmail = async ({ email, emailType, userId }: {
 }) => {
     try {
 
-        // Looking to send emails in production? Check out our Email API/SMTP product!
         var transporter = nodemailer.createTransport({
             host: process.env.MAILTRAP_HOST,
             port: Number(process.env.MAILTRAP_PORT),
@@ -23,7 +22,10 @@ export const sendEmail = async ({ email, emailType, userId }: {
 
 
         // Creating verification code and verification code expiry date and time, 3600000 is in millisecond.
-        const verificationCode = (Math.floor(100000 + Math.random() * 999999)).toString()
+        const verificationCode = Math.floor(Math.random() * 1000000)
+            .toString()
+            .padStart(6, '0');
+
         const verificationCodeExpiry = new Date(Date.now() + 900000);
 
         //  finding user and updating user on different type of email.
@@ -117,20 +119,20 @@ export const sendEmail = async ({ email, emailType, userId }: {
                         <p class="small-text">Visit this link to verify OTP:<a href="${process.env.WEBSITE_DOMAIN?.toString()}/verifyotp/${user.id}">Link</a> </p>
                         <p class="small-text">If you didn’t request this, please ignore this email.</p>
                         <hr />
-                        <p class="footer">&copy; 2025 Acme Corp. All rights reserved.</p>
+                        <p class="footer">&copy; 2025 E-Cell IIT Ropar. All rights reserved.</p>
                     </div>
                     </body>
                     </html>
                     `
 
             mailOption = {
-                from: "company@email.com",
+                from: process.env.EMAIL_SENDING_DOMAIN,
                 to: email,
                 subject: "Verify Your Email",
                 html: verificationMailContent
             }
         }
-        else if(emailType==="RESET"){
+        else if (emailType === "RESET") {
             user = await prisma.user.update({
                 where: {
                     id: userId
@@ -217,14 +219,14 @@ export const sendEmail = async ({ email, emailType, userId }: {
                         <p class="small-text">This code will expire in 15 minutes.</p>
                         <p class="small-text">If you didn’t request this, please ignore this email.</p>
                         <hr />
-                        <p class="footer">&copy; 2025 Acme Corp. All rights reserved.</p>
+                        <p class="footer">&copy; 2025 E-Cell IIT Ropar. All rights reserved.</p>
                     </div>
                     </body>
                     </html>
                     `
 
             mailOption = {
-                from: "company@email.com",
+                from: process.env.EMAIL_SENDING_DOMAIN,
                 to: email,
                 subject: "Reset Password for Account",
                 html: verificationMailContent

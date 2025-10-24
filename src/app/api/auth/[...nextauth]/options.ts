@@ -47,7 +47,6 @@ export const authOptions: NextAuthOptions = {
 
 
                 } catch (error: any) {
-                    console.error("Auth error:", error)
                     throw new Error(error.message || "Internal Server Error")
 
                 }

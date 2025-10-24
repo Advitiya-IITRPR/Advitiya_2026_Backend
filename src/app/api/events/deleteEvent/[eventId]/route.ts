@@ -34,9 +34,15 @@ export async function DELETE(req: NextRequest,{params}:{params: {eventId: string
                 message: "Event does not exist"
             },{status: 400})
         }
+        let publicIdForRuleBook;
+        if(isEventExist.eventRuleBook){
+            publicIdForRuleBook= getPublicIdFromUrl(isEventExist.eventRuleBook)
+            await cloudinary.uploader.destroy(publicIdForRuleBook as string)
+        }
 
-        const publicId = getPublicIdFromUrl(isEventExist.eventImage)
-        await cloudinary.uploader.destroy(publicId as string)
+
+        const publicIdForImage = getPublicIdFromUrl(isEventExist.eventImage)
+        await cloudinary.uploader.destroy(publicIdForImage as string)
 
         await prisma.event.delete({
             where: {

@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { responseCookiesToRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { NextRequest, NextResponse } from "next/server";
 
 

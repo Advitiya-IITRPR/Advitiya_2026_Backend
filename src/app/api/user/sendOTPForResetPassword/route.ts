@@ -3,23 +3,24 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export async function POST(req: NextRequest,{params}: {params: {userId: string}}){
+export async function POST(req: NextRequest){
     try {
-        const urlParams = await params
-        const userId = urlParams.userId
         // TYPE Must be: VERIFY OR RESET
-        const {type} = await req.json()
+        const {type,email,userId} = await req.json()
 
-        if(!userId){
+        if(!userId && !email){
             return NextResponse.json({
                 success: false,
-                message: "User id is required."
+                message: "User id or Email is required is required."
             },{status: 404})
         }
 
         const user = await prisma.user.findFirst({
             where:{
-                id: userId
+                OR:[
+                    {id: userId},
+                    {email: email}
+                ]
             }
         })
 
@@ -43,6 +44,7 @@ export async function POST(req: NextRequest,{params}: {params: {userId: string}}
         return NextResponse.json({
             success: true,
             message: "otp email send successfully",
+            data: user,
             emailResponse: emailResponse
         },{status: 200})
         
