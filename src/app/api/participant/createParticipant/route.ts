@@ -14,12 +14,12 @@ type userData = {
 export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession()
-        
-        if(!session){
+
+        if (!session) {
             return NextResponse.json({
                 success: false,
                 message: "Login Required before registration"
-            },{status: 400})
+            }, { status: 400 })
         }
 
 
@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
         const eventId = participationData.get("eventId") as string
         const rawUserData = participationData.getAll("userData") as string[];
 
-        console.log(participationData)
         // Parse each entry to your typed object
         const userData: userData[] = rawUserData.map((entry) => JSON.parse(entry));
 
@@ -73,9 +72,23 @@ export async function POST(req: NextRequest) {
             }, { status: 400 })
         }
 
-        let participantsArrayIds: string[]=[];
+        let participantsArrayIds: string[] = [];
+        const seenUsers = new Set<string>();
 
         for (let i = 0; i < userData.length; i++) {
+
+            const { email, mobileNo, userName } = userData[i];
+
+            // Check for duplicate in the input array itself
+            const uniqueKey = `${email}|${mobileNo}|${userName}`;
+            if (seenUsers.has(uniqueKey)) {
+                return NextResponse.json({
+                    success: false,
+                    message: `Duplicate user in input: ${userName}`
+                }, { status: 400 });
+            }
+            seenUsers.add(uniqueKey);
+
             const user = await prisma.user.findFirst({
                 where: {
                     email: userData[i].email,
