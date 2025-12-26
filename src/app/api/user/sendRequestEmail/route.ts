@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
             }, { status: 404 })
         }
 
-        var transporter = nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({
             host: process.env.MAILTRAP_HOST,
             port: Number(process.env.MAILTRAP_PORT),
             auth: {
@@ -129,4 +129,5 @@ export async function POST(req: NextRequest) {
         }, { status: 500 })
 
     }
+
 }
