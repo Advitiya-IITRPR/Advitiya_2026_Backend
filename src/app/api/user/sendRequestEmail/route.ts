@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
 
         const mailOption = {
             from: process.env.EMAIL_SENDING_DOMAIN,
-            to: process.env.ADMIN_EMAIL,
+            to: process.env.EMAIL_SENDING_DOMAIN,
             subject: subject,
             html: emailContent
         }
