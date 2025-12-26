@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
                         </div>
 
                         <div class="footer">
-                            <p>&copy; 2025 E-Cell IIT Ropar. All rights reserved.</p>
+                            <p>&copy; 2026 Advitiya. All rights reserved.</p>
                         </div>
                         </div>
                     </body>
@@ -131,3 +131,4 @@ export async function POST(req: NextRequest) {
     }
 
 }
+
