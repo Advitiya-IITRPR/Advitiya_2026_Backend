@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
+import { JWTPayload } from "jose"
+import prisma from "@/lib/prisma"
 
 
 
@@ -14,12 +16,33 @@ export async function POST(req: NextRequest){
             },{status: 404})
         }
 
-        const decodedValues = await jwt.verify(QRCodeData,process.env.JWT_SECRET!)
+        const decodedValues = await jwt.verify(QRCodeData,process.env.JWT_SECRET!) as JWTPayload
+
+        if(!decodedValues.id){
+            return NextResponse.json({
+                success: false,
+                message: "Invalid QR Code"
+            },{status: 400})
+        }
+
+        // Check that the accomodation details exist or not. 
+        const accomodationDetails = await prisma.accomodationDetails.findFirst({
+            where:{
+                id: decodedValues.id
+            }
+        })
+
+        if(!accomodationDetails){
+            return NextResponse.json({
+                success: false,
+                message: "Accomodation Details does not exist with this account"
+            },{status: 400})
+        }
 
         return NextResponse.json({
             success: true,
             message: "QR Code Data fetched successfully",
-            data: decodedValues
+            data: accomodationDetails
         })
 
     } catch (error) {
