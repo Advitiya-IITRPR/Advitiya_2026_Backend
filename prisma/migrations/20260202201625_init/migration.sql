@@ -11,7 +11,7 @@ CREATE TABLE "accomodationDetails" (
     "collegeName" TEXT NOT NULL,
     "paymentVerified" BOOLEAN NOT NULL DEFAULT false,
     "paymentMade" INTEGER NOT NULL,
-    "mealLefts" INTEGER NOT NULL DEFAULT 0,
+    "mealsLeft" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
