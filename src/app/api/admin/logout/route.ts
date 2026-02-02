@@ -11,7 +11,7 @@ export async function POST(req: NextRequest){
             message: "Admin logout from account."
         },{status: 200})
         
-        res.cookies.set('token', '', {
+        res.cookies.set('access_token', '', {
             path: '/admin',
             expires: new Date(0),
         });
