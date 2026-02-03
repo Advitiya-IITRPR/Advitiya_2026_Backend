@@ -19,17 +19,51 @@ enum Gender {
   Female
 }
 
-model accomodationDetails{
-  id  String  @id @db.Uuid  @default(uuid())
-  userName  String  
-  email String  
-  mobileNo  String
-  gender  Gender
-  collegeName String
-  paymentVerified Boolean @default(false)
-  paymentMade Int
-  mealsLeft Int @default(0)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model accomodationDetails {
+  id              String        @id @default(uuid()) @db.Uuid
+  userName        String
+  email           String
+  mobileNo        String
+  gender          Gender
+  collegeName     String
+  paymentVerified Boolean       @default(false)
+  paymentMade     Int
+  mealTaken       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  messEntries     messEntry[]
+  gateEntries     gateEntry[]
+  hostelEntries   hostelEntry[]
 }
 
+model messEntry {
+  id                    Int                 @id @default(autoincrement())
+  accomodationDetailsId String              @db.Uuid
+  accomodationDetails   accomodationDetails @relation(fields: [accomodationDetailsId], references: [id])
+  mealsLeft             Int
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+}
+
+enum EntryType {
+  Entry
+  Exit
+}
+
+model gateEntry {
+  id                    Int                 @id @default(autoincrement())
+  accomodationDetailsId String              @db.Uuid
+  accomodationDetails   accomodationDetails @relation(fields: [accomodationDetailsId], references: [id])
+  entryType             EntryType
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+}
+
+model hostelEntry {
+  id                    Int                 @id @default(autoincrement())
+  accomodationDetailsId String              @db.Uuid
+  accomodationDetails   accomodationDetails @relation(fields: [accomodationDetailsId], references: [id])
+  entryType             EntryType
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+}

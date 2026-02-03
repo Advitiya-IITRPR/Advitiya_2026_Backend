@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
             secure: true,
             sameSite: "lax",
             path: "/admin",
+            maxAge: 3600*24*4
         });
 
         return res;

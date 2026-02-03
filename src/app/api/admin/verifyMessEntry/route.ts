@@ -29,20 +29,44 @@ export async function POST(req: NextRequest){
         const accomodationDetails = await prisma.accomodationDetails.findFirst({
             where:{
                 id: decodedValues.id
+            },
+            include:{
+                messEntries: true,
+                hostelEntries: true,
+                gateEntries: true
             }
         })
 
         if(!accomodationDetails){
             return NextResponse.json({
                 success: false,
-                message: "Accomodation Details does not exist with this account"
+                message: "Accomodation Details does not exist with this QR Code"
             },{status: 400})
         }
+
+        if(accomodationDetails.mealTaken===0 || (accomodationDetails.mealTaken-accomodationDetails.messEntries.length)===0){
+            return NextResponse.json({
+                success: false,
+                message: "No Meals Left",
+            },{status: 400})
+        }
+
+        // Now create the mess Entry and update the meal count
+
+        const createdMessEntry = await prisma.messEntry.create({
+            data:{
+                accomodationDetailsId: accomodationDetails.id,
+                mealsLeft: accomodationDetails.mealTaken - accomodationDetails.messEntries.length-1
+            },
+            include:{
+                accomodationDetails: true
+            }
+        })
 
         return NextResponse.json({
             success: true,
             message: "QR Code Data fetched successfully",
-            data: accomodationDetails
+            data: createdMessEntry
         })
 
     } catch (error) {

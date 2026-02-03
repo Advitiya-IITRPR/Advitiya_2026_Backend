@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
-import { generalDecrypt } from "jose";
-import { printCustomRoutes } from "next/dist/build/utils";
+
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -14,6 +13,20 @@ export async function POST(req: NextRequest){
                 success: false,
                 message: "All Fields are required"
             },{status: 404})
+        }
+
+        // Check that the user already exist with this email id or not.
+        const isUserExist = await prisma.accomodationDetails.findFirst({
+            where:{
+                email: email
+            }
+        })
+
+        if(isUserExist){
+            return NextResponse.json({
+                success: false,
+                message: "User already exist with this email id"
+            },{status: 400})
         }
 
         if(gender!=="Male" && gender!=="Female"){
@@ -32,7 +45,7 @@ export async function POST(req: NextRequest){
                 userName, email, mobileNo, gender, collegeName, 
                 paymentMade: parseInt(paymentMade),
                 paymentVerified: paymentStatus,
-                mealsLeft: parseInt(mealsLeft)
+                mealTaken: parseInt(mealsLeft)
             }
         })
 
