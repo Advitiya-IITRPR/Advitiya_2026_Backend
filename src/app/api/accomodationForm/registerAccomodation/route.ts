@@ -67,15 +67,12 @@ export async function POST(req: NextRequest) {
             errorCorrectionLevel: "H",
         });
 
-        console.log(qrBuffer)
-
         var transporter = nodemailer.createTransport({
-            host: process.env.MAILTRAP_HOST,
-            port: Number(process.env.MAILTRAP_PORT),
+            service: "gmail",
             auth: {
-                user: process.env.MAILTRAP_USER,
-                pass: process.env.MAILTRAP_PASS
-            }
+              user: process.env.GMAIL_USER,
+              pass: process.env.GMAIL_APP_PASSWORD,
+            },
         });
 
         const verificationMailContent = `<!DOCTYPE html>
