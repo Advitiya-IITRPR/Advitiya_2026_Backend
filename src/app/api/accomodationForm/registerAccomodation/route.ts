@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
     </p>
 
     <p class="small-text">
-      This QR code is personal to you. Do not share it with anyone.
+      This QR code is personal to you. Do not share it with anyone. Please bring your aadhar card photo copy also.
     </p>
 
     <p class="small-text">
