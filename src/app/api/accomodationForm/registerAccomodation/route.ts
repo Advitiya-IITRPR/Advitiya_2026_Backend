@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import QRCode from "qrcode";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken"
 
 
 
@@ -50,7 +51,17 @@ export async function POST(req: NextRequest) {
             }
         })
 
-        const qrBuffer = await QRCode.toBuffer(String(accomodationCreated.id), {
+        const encodedString = jwt.sign(
+                    {
+                        id: accomodationCreated.id,
+                    },
+                    process.env.JWT_SECRET!,
+                    {
+                        expiresIn: '1h'
+                    }
+                )
+
+        const qrBuffer = await QRCode.toBuffer(String(encodedString), {
             type: "png",
             width: 260,
             errorCorrectionLevel: "H",
