@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
                     },
                     process.env.JWT_SECRET!,
                     {
-                        expiresIn: '1h'
+                        expiresIn: '5d'
                     }
                 )
 
